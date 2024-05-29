@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="NPGA: Neural Parametric Gaussian Avatars">
+    <meta name="keywords" content="NPGA, Virtual Avatars, Neural Head Avatar, Gaussian Splatting, MonoNPHM, NPHM, morphable model, 4D reconstruction, Neural Fields, Deformation Field">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NPGA: Neural Parametric Gaussian Avatars</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E0HR9YQK2K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-E0HR9YQK2K');
+    </script>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+
+    <style>
+		.render_wrapper {
+			position: relative;
+            height: 500px;
+         }
+        .render_wrapper_small {
+			position: relative;
+            height: 200px;
+         }
+		.render_div {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+        #interpolation-image-wrapper-car{
+            text-align: center;
+        }
+        #interpolation-image-wrapper-chair{
+            text-align: center;
+        }
+        .nested-columns {
+            margin-bottom: 0 !important;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
+    <script src="./static/js/index.js"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title">NPGA: Neural Parametric Gaussian Avatars</h1>
+
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <!-- PDF Link. -->
+                                <span class="link-block">
+                                    <a href="static/NPGA.pdf"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </span>
+                                        <span>Paper</span>
+                                    </a>
+                                </span>
+                                <span class="link-block">
+                                    <a class="external-link button is-normal is-rounded is-dark" href="todo">
+                                        <span class="icon">
+                                            <i class="ai ai-arxiv"></i>
+                                        </span>
+                                        <span>arXiv</span>
+                                    </a>
+                                </span>
+                                <!-- Video Link. -->
+                                <span class="link-block">
+                                    <a href="todo"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <svg class="svg-inline--fa fa-youtube fa-w-18" aria-hidden="true"
+                                                focusable="false" data-prefix="fab" data-icon="youtube" role="img"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                                                data-fa-i2svg="">
+                                                <path fill="currentColor"
+                                                    d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z">
+                                                </path>
+                                            </svg><!-- <i class="fab fa-youtube"></i> Font Awesome fontawesome.com -->
+                                        </span>
+                                        <span>Video</span>
+                                    </a>
+                                </span>
+
+
+                                <!-- Github Link. -->
+                                <span class="link-block">
+                                    <a class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="fab fa-github"></i>
+                                        </span>
+                                        <span>Code (coming soon)</span>
+                                    </a>
+                                </span>
+                                <span class="link-block"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero teaser">
+        <div class="container is-max-desktop">
+            <div class="hero-body">
+                <img src="./static/teaser/teaser_npga.jpg" height="200%" />
+                <h2 class=" subtitle has-text-centered" style="padding-top: 10px">
+                    <p align="left">
+                    We present <b>NPGA</b>, a 3DGS-based method to create virtual avatars on top of the rich expression space of NPHM.
+                    On the left, we show our avatars in canonical space, alongside our per-Gaussian latent features.
+                    On the right, we show an animated NPGA using the expression of the inset figure.
+                    </p>
+                </h2>
+            </div>
+        </div>
+    </section>
+
+
+
+
+<!-- Result Overlay Videos-->
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div style="text-align: center;" >
+      <p style="font-size: 28px;">
+          Self-Reenactment Results of <b>NPGA</b>.
+      </p>
+      <p>
+          <b>Left</b>: held-out sequence; <b>Right</b>: Self-Reenactment.
+      </p>
+
+  </div>
+    <div class="hero-body">
+        <div id="results-container" class="container">
+            <div id="results-carousel" class="carousel results-carousel">
+                <div class="item item-55">
+                    <video poster="" id="55" autoplay controls muted loop playsinline height="100%">
+                        <source src="./static/videos/sa55-compressed.mov"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-175">
+                    <video poster="" id="175" autoplay controls muted loop playsinline height="100%">
+                        <source src="./static/videos/sa175-compressed.mov"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item-18">
+                    <video poster="" id="18" autoplay controls muted loop playsinline height="100%">
+                        <source src="./static/videos/sa18-compressed.mov"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-251">
+                    <video poster="" id="251" autoplay controls muted loop playsinline height="100%">
+                        <source src="./static/videos/sa251-compressed.mov"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-37">
+                    <video poster="" id="37" autoplay controls muted loop playsinline height="100%">
+                        <source src="./static/videos/sa37-compressed.mov"
+                                type="video/mp4">
+                    </video>
+                </div>
+
+                <div class="item item-165">
+                    <video poster="" id="165" autoplay controls muted loop playsinline height="100%">
+                        <source src="./static/videos/sa165-compressed.mov"
+                                type="video/mp4">
+                    </video>
+                </div>
+
+
+
+
+        </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Abstract. -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p margin="0">
+The creation of high-fidelity, digital versions of human heads is an important stepping stone in the process of further integrating virtual components into our everyday lives.
+  Constructing such avatars is a challenging research problem, due to a high demand for photo-realism and real-time rendering performance.
+  In this work, we propose Neural Parametric Gaussian Avatars (NPGA), a data-driven approach to create high-fidelity, controllable avatars from multi-view video recordings.
+  We build our method around 3D Gaussian splatting for its highly efficient rendering and to inherit the topological flexibility of point clouds.
+  In contrast to previous work, we condition our avatars' dynamics on the rich expression space of neural parametric head models (NPHM), instead of mesh-based 3DMMs.
+  To this end, we distill the backward deformation field of our underlying NPHM into forward deformations which are compatible with rasterization-based rendering. All remaining fine-scale, expression-dependent details are learned from the multi-view videos.
+  To increase the representational capacity of our avatars, we augment the canonical Gaussian point cloud using per-primitive latent features which govern its dynamic behavior.
+  To regularize this increased dynamic expressivity, we propose Laplacian terms on the latent features and predicted dynamics.
+  We evaluate our method on the public NeRSemble dataset, demonstrating that NPGA significantly outperforms the previous state-of-the-art avatars on the self-reenactment task by ~2.6PSNR. Furthermore, we demonstrate accurate animation capabilities from real-world monocular videos.
+  </div>
+                </div>
+            </div>
+
+            <!-- Paper video. -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Video</h2>
+                    <div class="publication-video">
+                        <iframe src="todo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+            <!--/ Paper video. -->
+        </div>
+    </section>
+
+
+
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <div class="container is-max-desktop">
+                <div class="content has-text-justified">
+                    <h2 class="title is-3">Latent Expression Interpolation</h2>
+                      <p>
+                  Here is an interactive viewer allowing for latent expression interpolation.
+                  Drag the <span style="color: #29e">blue cursor</span>
+                  around to linearly interpolate between four different driving expressions.
+                  Two animated avatars are displayed on the right.
+              </p>
+                </div>
+        <div class="columns is-centered is-vcentered">
+          <div class="column is-one-third">
+            <div class="hyper-space-wrapper-shape has-text-centered">
+              <div class="hyper-space-axis-shape">
+                <div class="hyper-space-shape-outer">
+                    <div class="hyper-space-shape">
+                        <div class="hyper-space-cursor-shape"></div>
+                  </div>
+                </div>
+              </div>
+              Latent Expression Coordinates
+              <br/>
+              <small>(Quadrilateral linear interpolation between 4 cornering expressions.)</small>
+            </div>
+          </div>
+          <div class="column is-two-thirds has-text-centered">
+            <div class="hyper-grid-wrapper-shape">
+              <div class="hyper-grid-rgb-shape">
+                <img src="./static/figures/interpolation_grid_npga_single2_qual95.jpg"/>
+              </div>
+            </div>
+            Two Animated NPGAs.
+          </div>
+        </div>
+      </div>
+        </div>
+
+    </section>
+
+
+
+    <section class="hero is-light is-small">
+
+    <div class="hero-body">
+        <div style="text-align: center;" >
+              <p style="font-size: 28px;">
+                  Cross-Reenactments.
+              </p>
+              <p>
+                  Tracked expression codes from the multi-view video (left) are transferred to NPGAs on the right.
+              </p>
+
+          </div>
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/ca1-compressed.mov"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/ca2-compressed.mov"
+                    type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+    </div>
+</section>
+
+    <section class="hero is-light is-small">
+
+    <div class="hero-body">
+        <div style="text-align: center;" >
+              <p style="font-size: 28px;">
+                  Real-World Application.
+              </p>
+              <p>
+                  Tracked expression codes from the monocular RGB video (left) are transferred to NPGAs on the right.
+              </p>
+
+          </div>
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/website_kinect1.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/website_kinect1.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+    </div>
+</section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+
+    <!-- Overview. -->
+    <div class="columns is-centered" style="margin-top: 15px">
+        <div class="column is-full-width">
+            <h2 class="title is-3">Method Overview</h2>
+            <img src="./static/teaser/method_npga.jpg"/>
+            <div class="content has-text-justified" style="padding-top: 15px">
+                <p><b>a)</b>
+    Our method is based on the MonoNPHM model. We track MonoNPHM against COLMAP point clouds computed on the NeRSemble dataset, which results in geometrically accurate model-based trackings.</p>
+                <p><b>b)</b>
+    We propose a cycle-consistency objective to invert MonoNPHM's backward deformation field.
+                    The resulting forward deformation field is directly compatible with rasterization-based rendering.
+                </p>
+                <p><b>c)</b>
+    NPGAs consist of canonical Gaussian point cloud, which is forward warped using the distilled deformation prior F and
+    second network G, responsible for learning fine-scale dynamic details.
+                <p><b>d)</b>
+    By attaching latent features to each primitive, we lift the input to the deformation fields to a higher dimensional space,
+    such that each primitive's dyanmic behaviour can be more accurately described.
+            </p>
+            </p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="columns is-centered">
+        <div class="column is-full-width">
+            <h2 class="title is-3">Related Links</h2>
+
+            <div class="content has-text-justified">
+
+                <p>
+                    <b>More Gaussian Avatars:</b></p>
+                <p><a href="https://yuelangx.github.io/gaussianheadavatar/">GHA</a> also uses a learned MLP and <a href="https://shenhanqian.github.io/gaussian-avatars">GaussianAvatars</a> binds Gaussians to an undeerlying FLAME mesh.
+
+                </p>
+                <p>
+                     <a href="https://stephenlombardi.github.io/projects/mvp/">MVP</a> proposes a uv-space 2D CNN to generate volumetric radiance information in an amortized fashion.
+                </p>
+
+
+            <p>
+            <b>
+                        Check out the <a href="https://tobias-kirschstein.github.io/nersemble/">NeRSemble Dataset</a>.
+                    </b>
+                </p>
+            <p>
+                <b>
+                    For more work on NPHMs see:
+                </b>
+            </p>
+            <p>
+                <a href="https://simongiebenhain.github.io/NPHM/">The original NPHM paper</a>, and an improved version <a href="https://simongiebenhain.github.io/NPHM/">MonoNPHM</a>, which uses backward deformations fields, includes color and allows for monocular tracking.
+            </p>
+
+                <!--
+                <p>
+                     To be continued.
+                </p>
+                -->
+            </div>
+        </div>
+    </div>
+    </div>
+    </section>
+
+
+
+
+
+
+
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <a class="icon-link" href="static/nphm.pdf">
+                    <i class="fas fa-file-pdf"></i>
+                </a>
+                <a class="icon-link" href="https://github.com/SimonGiebenhain" class="external-link" disabled>
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="content">
+                        <p style="text-align:center">
+                            Source code borrowed from <a href="https://keunhong.com/">Keunhong Park</a>'s
+                            <a href="https://nerfies.github.io/">Nerfies website</a> and especially
+                            <a href="https://niessnerlab.org/members/yawar_siddiqui/profile.html">Yawar Siddiqui's</a> adoption for
+                            <a href="https://nihalsid.github.io/texturify//">Texturify</a>.
+                        </p>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
